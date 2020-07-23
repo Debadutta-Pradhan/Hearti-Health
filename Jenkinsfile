@@ -1,27 +1,15 @@
-pipeline {
-    agent any
-        stages {
-            stage('package'){
-                steps{
-                    bat '''
-                         npm install
-                     '''
-                    }
-            }
-
-                stage('npm start'){
-                    steps{
-                        bat '''
-                            npm start  
-                        '''
-                    }
-                }   
-                stage('npm run'){
-                    steps{
-                        bat '''
-                            npm run ng -- build --prod  
-                        '''
-                    }
-                }
-       }
-}
+node {
+         stage ('Checkout SCM'){
+                    git branch: 'master',url: 'https://github.com/Akanshagiriya/Shopping_Cart.git'
+         }
+         
+         stage('Install node modules'){
+                      bat "npm install"
+         }
+         stage('Build'){
+                     bat "npm run ng -- build --prod"
+         }
+         stage('Deploy'){
+                      bat "pm2 restart all"
+         }
+     }
